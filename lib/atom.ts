@@ -1,7 +1,7 @@
 import { atom } from "jotai";
 
-export const nextStepAtom = atom(false);
+export const oneStepAtom = atom(false);
+
+export const secondStepAtom = atom(false);
 
 export const thirdStepAtom = atom(false);
-
-export const fourthStepAtom = atom(false);

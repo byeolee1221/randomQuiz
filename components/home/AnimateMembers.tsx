@@ -1,4 +1,4 @@
-import { nextStepAtom, thirdStepAtom } from "@/lib/atom";
+import { oneStepAtom, secondStepAtom } from "@/lib/atom";
 import { membersSchema } from "@/zodSchema/memberConstants";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
@@ -10,8 +10,8 @@ import toast from "react-hot-toast";
 import { z } from "zod";
 
 const AnimateMembers = () => {
-  const isNext = useAtomValue(nextStepAtom);
-  const [isThirdStep, setIsThirdStep] = useAtom(thirdStepAtom);
+  const isNext = useAtomValue(oneStepAtom);
+  const [isSecondStep, setIsSecondStep] = useAtom(secondStepAtom);
 
   const form = useForm<z.infer<typeof membersSchema>>({
     resolver: zodResolver(membersSchema),
@@ -77,7 +77,7 @@ const AnimateMembers = () => {
 
       if (response.status === 200) {
         form.reset();
-        setIsThirdStep((prev) => !prev);
+        setIsSecondStep((prev) => !prev);
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -88,7 +88,7 @@ const AnimateMembers = () => {
   };
 
   return (
-    <motion.div
+    isNext && <motion.div
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: isNext ? 1 : 0, y: isNext ? 0 : -20 }}
       transition={{ duration: 1 }}

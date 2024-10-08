@@ -1,4 +1,4 @@
-import { fourthStepAtom, thirdStepAtom } from "@/lib/atom";
+import { secondStepAtom, thirdStepAtom } from "@/lib/atom";
 import { questionSchema } from "@/zodSchema/questionConstants";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
@@ -10,8 +10,8 @@ import toast from "react-hot-toast";
 import { z } from "zod";
 
 const AnimateQuestion = () => {
-  const isNext = useAtomValue(thirdStepAtom);
-  const [isFourthStep, setIsFourthStep] = useAtom(fourthStepAtom);
+  const isNext = useAtomValue(secondStepAtom);
+  const [isThirdStep, setIsThirdStep] = useAtom(thirdStepAtom);
 
   const form = useForm<z.infer<typeof questionSchema>>({
     resolver: zodResolver(questionSchema),
@@ -21,8 +21,8 @@ const AnimateQuestion = () => {
       q2: "",
       q3: "",
       q4: "",
-      q5: ""
-    }
+      q5: "",
+    },
   });
 
   const isLoading = form.formState.isLoading;
@@ -31,17 +31,11 @@ const AnimateQuestion = () => {
   const handleSubmit = async (values: z.infer<typeof questionSchema>) => {
     try {
       const response = await axios.post("/api/question", {
-        question: [
-          values.q1,
-          values.q2,
-          values.q3,
-          values.q4,
-          values.q5
-        ]
+        question: [values.q1, values.q2, values.q3, values.q4, values.q5],
       });
 
       if (response.status === 201) {
-        setIsFourthStep((prev) => !prev);
+        setIsThirdStep((prev) => !prev);
         form.reset();
       }
     } catch (error) {
@@ -50,18 +44,43 @@ const AnimateQuestion = () => {
         toast.error("오류가 발생하였습니다. 잠시 후 다시 시도해주세요.");
       }
     }
-  }
+  };
 
   const inputArr = [
-    { label: "질문 1 : ", name: "q1", error: error.q1?.message, register: {...form.register("q1")} },
-    { label: "질문 2 : ", name: "q2", error: error.q2?.message, register: {...form.register("q2")} },
-    { label: "질문 3 : ", name: "q3", error: error.q3?.message, register: {...form.register("q3")} },
-    { label: "질문 4 : ", name: "q4", error: error.q4?.message, register: {...form.register("q4")} },
-    { label: "질문 5 : ", name: "q5", error: error.q5?.message, register: {...form.register("q5")} },
+    {
+      label: "질문 1 : ",
+      name: "q1",
+      error: error.q1?.message,
+      register: { ...form.register("q1") },
+    },
+    {
+      label: "질문 2 : ",
+      name: "q2",
+      error: error.q2?.message,
+      register: { ...form.register("q2") },
+    },
+    {
+      label: "질문 3 : ",
+      name: "q3",
+      error: error.q3?.message,
+      register: { ...form.register("q3") },
+    },
+    {
+      label: "질문 4 : ",
+      name: "q4",
+      error: error.q4?.message,
+      register: { ...form.register("q4") },
+    },
+    {
+      label: "질문 5 : ",
+      name: "q5",
+      error: error.q5?.message,
+      register: { ...form.register("q5") },
+    },
   ];
 
   return (
-    !isFourthStep && <motion.div
+    isNext && <motion.div
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: isNext ? 1 : 0, y: isNext ? 0 : -20 }}
       transition={{ duration: 1 }}
@@ -82,15 +101,16 @@ const AnimateQuestion = () => {
               rows={3}
               id={item.name}
               name={item.name}
-              className={clsx("border border-gray-900 bg-transparent w-[90%] focus:outline-none text-white rounded-md p-2 resize-none", item.error ? "border-red-500" : "")}
+              className={clsx(
+                "border border-gray-900 bg-transparent w-[90%] focus:outline-none text-white rounded-md p-2 resize-none",
+                item.error ? "border-red-500" : ""
+              )}
             />
           </div>
         ))}
-        <button className="custom-btn">
-          {isLoading ? "문제를 섞고 있어요." : "문제 섞기"}
-        </button>
+        <button className="custom-btn">{isLoading ? "문제를 섞고 있어요." : "문제 섞기"}</button>
       </form>
-    </motion.div >
+    </motion.div>
   );
 };
 

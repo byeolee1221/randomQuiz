@@ -6,23 +6,25 @@ import { NextApiRequest, NextApiResponse } from "next";
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await dbConnect();
 
-  const { teamId } = req.body;
-
-  if (req.method === "POST") {
+  const { teamId } = req.query;
+  
+  if (req.method === "GET") {
     try {
       const members = await Members.find({ teamId });
       const questions = await Question.find();
 
-      if (members.length === 0 || questions.length === 0) {
+      if (members.length === 0) {
         return res.status(400).json({ message: "팀원 또는 질문을 확인해주세요." });
       }
 
+      await Question.deleteMany({ teamId });
+      
       const mixQuestions = questions.sort(() => Math.random() - 0.5);
       const assignedAnswer = mixQuestions.map((question) => {
         const randomMember = members[Math.floor(Math.random() * members.length)];
         return {
           question: question.question,
-          member: randomMember.name
+          member: randomMember.name,
         }
       });
       

@@ -13,13 +13,13 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { useAtom } from "jotai";
-import { nextStepAtom } from "@/lib/atom";
+import { oneStepAtom } from "@/lib/atom";
 
 const AnimateSelectTeam = () => {
   const isVisible = useTimer(1200);
   const [selectOption, setSelectOption] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [isNext, setIsNext] = useAtom(nextStepAtom);
+  const [isNext, setIsNext] = useAtom(oneStepAtom);
   
   const handleChangeOption = (value: string) => {
     setSelectOption(value);

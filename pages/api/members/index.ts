@@ -8,6 +8,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (req.method === "POST") {
     try {
       const { members, teamId } = req.body;
+
+      const checkExisting = await Members.find({ teamId, name: { $in: members } });
+
+      if (checkExisting.length > 0) {
+        await Members.deleteMany({ teamId, name: { $in: members } });
+      }
       
       const savedMembers = await Promise.all(
         members.map(async (name: string) => {
