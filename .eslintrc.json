@@ -1,3 +1,6 @@
 {
-  "extends": ["next/core-web-vitals", "next/typescript"]
+  "extends": ["next/core-web-vitals", "next/typescript"],
+  "rules": {
+    "no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }] // 변수 이름이 _로 시작하는 경우 경고 무시
+  }
 }
