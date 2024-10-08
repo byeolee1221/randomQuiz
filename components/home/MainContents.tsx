@@ -4,6 +4,7 @@ import { useAtom } from "jotai";
 import { useCallback, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
+import ResetBtn from "./ResetBtn";
 
 interface IProps {
   teamId: string | null;
@@ -18,7 +19,7 @@ const MainContents = ({ teamId }: IProps) => {
   const isFinal = useAtom(thirdStepAtom);
   const [randomQuiz, setRandomQuiz] = useState<IRandomQuiz[]>([]);
   const [error, setError] = useState("");
-
+  
   const getRandomQuiz = useCallback(async () => {
     if (!teamId) return;
 
@@ -56,6 +57,9 @@ const MainContents = ({ teamId }: IProps) => {
           {error !== "" && <span className="error-text-start">{error}</span>}
         </div>
       ))}
+      <div className="flex flex-col space-y-5 items-center justify-center">
+      <ResetBtn />
+    </div> 
     </motion.div>
   );
 };

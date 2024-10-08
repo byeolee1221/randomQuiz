@@ -33,7 +33,7 @@ const Home = () => {
       <AnimateSelectTeam />
       <AnimateMembers />
       <AnimateQuestion />
-      <MainContents teamId={teamId} />
+      {isThirdStep && <MainContents teamId={teamId} />}
     </div>
   );
 }

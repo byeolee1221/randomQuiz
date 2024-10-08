@@ -30,8 +30,10 @@ const AnimateQuestion = () => {
 
   const handleSubmit = async (values: z.infer<typeof questionSchema>) => {
     try {
+      const teamId = localStorage.getItem("selectedTeamId");
       const response = await axios.post("/api/question", {
         question: [values.q1, values.q2, values.q3, values.q4, values.q5],
+        teamId,
       });
 
       if (response.status === 201) {
@@ -80,37 +82,42 @@ const AnimateQuestion = () => {
   ];
 
   return (
-    isNext && <motion.div
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: isNext ? 1 : 0, y: isNext ? 0 : -20 }}
-      transition={{ duration: 1 }}
-      className="flex flex-col space-y-6"
-    >
-      <h2 className="text-center text-xl">3. 질문을 입력해주세요.</h2>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="flex flex-col space-y-6">
-        {inputArr.map((item) => (
-          <div
-            key={item.name}
-            className="bg-slate-600 py-3 rounded-lg flex items-center justify-center space-x-3"
-          >
-            <label htmlFor={item.name} className="text-lg font-semibold">
-              {item.label}
-            </label>
-            <textarea
-              {...item.register}
-              rows={3}
-              id={item.name}
-              name={item.name}
-              className={clsx(
-                "border border-gray-900 bg-transparent w-[90%] focus:outline-none text-white rounded-md p-2 resize-none",
-                item.error ? "border-red-500" : ""
-              )}
-            />
-          </div>
-        ))}
-        <button className="custom-btn">{isLoading ? "문제를 섞고 있어요." : "문제 섞기"}</button>
-      </form>
-    </motion.div>
+    isNext && (
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: isNext ? 1 : 0, y: isNext ? 0 : -20 }}
+        transition={{ duration: 1 }}
+        className="flex flex-col space-y-6"
+      >
+        <h2 className="text-center text-xl">3. 질문을 입력해주세요.</h2>
+        <form onSubmit={form.handleSubmit(handleSubmit)} className="flex flex-col space-y-6">
+          {inputArr.map((item) => (
+            <div
+              key={item.name}
+              className="bg-slate-600 py-3 rounded-lg flex items-center justify-center space-x-3"
+            >
+              <div className="flex flex-col space-y-3">
+                <label htmlFor={item.name} className="text-lg font-semibold">
+                  {item.label}
+                </label>
+                <input
+                  {...item.register}
+                  type="text"
+                  id={item.name}
+                  name={item.name}
+                  autoComplete="off"
+                  className={clsx(
+                    "border border-gray-900 bg-transparent w-[90%] focus:outline-none text-white rounded-md p-2 resize-none",
+                    item.error ? "border-red-500" : ""
+                  )}
+                />
+              </div>
+            </div>
+          ))}
+          <button className="custom-btn">{isLoading ? "문제를 섞고 있어요." : "문제 섞기"}</button>
+        </form>
+      </motion.div>
+    )
   );
 };
 

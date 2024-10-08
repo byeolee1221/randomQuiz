@@ -2,6 +2,7 @@ import dbConnect from "@/lib/mongoDB";
 import type { NextApiResponse, NextApiRequest } from "next";
 import Team from "@/lib/models/team";
 import Question from "@/lib/models/question";
+import Members from "@/lib/models/members";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await dbConnect();
@@ -14,9 +15,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       if (existingCheck) {
         await Question.deleteMany({ teamId: existingCheck._id });
+        await Members.deleteMany({ teamId: existingCheck._id });
         await Team.deleteOne({ _id: existingCheck._id });
       }
-
+      
       const newTeam = new Team({ team, members: members || [] });
       await newTeam.save();
 
