@@ -11,9 +11,12 @@ import { z } from "zod";
 
 const AnimateMembers = () => {
   const isNext = useAtomValue(oneStepAtom);
-  const [isSecondStep, setIsSecondStep] = useAtom(secondStepAtom);
-
-  const form = useForm<z.infer<typeof membersSchema>>({
+  const {
+    register,
+    reset,
+    handleSubmit,
+    formState: { errors, isLoading },
+  } = useForm<z.infer<typeof membersSchema>>({
     resolver: zodResolver(membersSchema),
     mode: "all",
     defaultValues: {
@@ -21,62 +24,54 @@ const AnimateMembers = () => {
       member2: "",
       member3: "",
       member4: "",
-      member5: "",
+      member5: null,
     },
   });
-
-  const isLoading = form.formState.isLoading;
-  const error = form.formState.errors;
+  const [isSecondStep, setIsSecondStep] = useAtom(secondStepAtom);
 
   const inputArr = [
     {
-      register: { ...form.register("member1") },
+      register: { ...register("member1") },
       name: "member1",
       placeHolder: "팀원1",
-      error: error.member1,
+      error: errors.member1,
     },
     {
-      register: { ...form.register("member2") },
+      register: { ...register("member2") },
       name: "member2",
       placeHolder: "팀원2",
-      error: error.member2,
+      error: errors.member2,
     },
     {
-      register: { ...form.register("member3") },
+      register: { ...register("member3") },
       name: "member3",
       placeHolder: "팀원3",
-      error: error.member3,
+      error: errors.member3,
     },
     {
-      register: { ...form.register("member4") },
+      register: { ...register("member4") },
       name: "member4",
       placeHolder: "팀원4",
-      error: error.member4,
+      error: errors.member4,
     },
     {
-      register: { ...form.register("member5") },
+      register: { ...register("member5") },
       name: "member5",
       placeHolder: "팀원5",
-      error: error.member5,
+      error: errors.member5,
     },
   ];
 
-  const handleSubmit = async (values: z.infer<typeof membersSchema>) => {
+  const onSubmit = async (values: z.infer<typeof membersSchema>) => {
     try {
       const teamId = localStorage.getItem("selectedTeamId");
       const response = await axios.post(`/api/members`, {
-        members: [
-          values.member1,
-          values.member2,
-          values.member3,
-          values.member4,
-          values.member5
-        ],
-        teamId
+        members: [values.member1, values.member2, values.member3, values.member4, values.member5],
+        teamId,
       });
 
       if (response.status === 200) {
-        form.reset();
+        reset();
         setIsSecondStep((prev) => !prev);
       }
     } catch (error) {
@@ -88,36 +83,42 @@ const AnimateMembers = () => {
   };
 
   return (
-    isNext && <motion.div
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: isNext ? 1 : 0, y: isNext ? 0 : -20 }}
-      transition={{ duration: 1 }}
-      className="flex flex-col space-y-6"
-    >
-      <h2 className="text-center text-xl">2. 팀원의 이름을 적어주세요.</h2>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="flex flex-col space-y-8">
-        <div className="flex items-center justify-between">
-          {inputArr.map((item, i) => (
-            <div key={i} className="flex flex-col space-y-2">
-              <input
-                {...item.register}
-                type="text"
-                name={item.name}
-                className={clsx(
-                  "p-2 rounded-lg w-40 text-gray-900",
-                  item.error ? "border-2 border-red-500" : ""
-                )}
-                placeholder={item.placeHolder}
-                autoComplete="off"
-              />
-            </div>
-          ))}
-        </div>
-        <button type="submit" className="custom-btn" disabled={!form.formState.isValid}>
-          {isLoading ? "팀원 등록중" : "팀원 등록하기"}
-        </button>
-      </form>
-    </motion.div>
+    isNext && !isSecondStep && (
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: isNext ? 1 : 0, y: isNext ? 0 : -20 }}
+        transition={{ duration: 1 }}
+        className="flex flex-col space-y-6"
+      >
+        <h2 className="text-center text-xl">2. 팀원의 이름을 적어주세요.</h2>
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          onError={() => toast.error("입력하신 이름을 확인해주세요.")}
+          className="flex flex-col space-y-8"
+        >
+          <div className="flex items-center justify-between">
+            {inputArr.map((item, i) => (
+              <div key={i} className="flex flex-col space-y-2">
+                <input
+                  {...item.register}
+                  type="text"
+                  name={item.name}
+                  className={clsx(
+                    "p-2 rounded-lg w-40 text-gray-900",
+                    item.error ? "border-2 border-red-500" : ""
+                  )}
+                  placeholder={item.placeHolder}
+                  autoComplete="off"
+                />
+              </div>
+            ))}
+          </div>
+          <button type="submit" className="custom-btn">
+            {isLoading ? "팀원 등록중" : "팀원 등록하기"}
+          </button>
+        </form>
+      </motion.div>
+    )
   );
 };
 

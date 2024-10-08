@@ -9,13 +9,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     try {
       const { question, teamId } = req.body;
 
-      const existingCheck = await Question.find({ teamId, question: { $in: question } });
+      const exceptNullQuestion = question.filter((q: string) => q !== null && q !== undefined);
+
+      const existingCheck = await Question.find({ teamId, question: { $in: exceptNullQuestion } });
 
       if (existingCheck.length > 0) {
-        await Question.deleteMany({ teamId, question: { $in: question } });
+        await Question.deleteMany({ teamId, question: { $in: exceptNullQuestion } });
       }
   
-      const savedQuestion = await Question.insertMany(question.map((q: string) => ({ question: q, teamId })));
+      const savedQuestion = await Question.insertMany(exceptNullQuestion.map((q: string) => ({ question: q, teamId })));
       return res.status(201).json({ questions: savedQuestion });
     } catch (error) {
       console.error("질문 저장 api에서 오류 발생", error);

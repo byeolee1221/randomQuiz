@@ -11,7 +11,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (req.method === "GET") {
     try {
       const members = await Members.find({ teamId });
-      const questions = await Question.find();
+      const questions = await Question.find({ teamId });
 
       if (members.length === 0) {
         return res.status(400).json({ message: "팀원이 등록됐는지 확인해주세요." });

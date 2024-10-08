@@ -20,7 +20,7 @@ const AnimateSelectTeam = () => {
   const [selectOption, setSelectOption] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isNext, setIsNext] = useAtom(oneStepAtom);
-  
+
   const handleChangeOption = (value: string) => {
     setSelectOption(value);
   };
@@ -51,33 +51,35 @@ const AnimateSelectTeam = () => {
   };
 
   return (
-    <motion.form
-      onSubmit={handleSubmit}
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : -20 }}
-      transition={{ duration: 1 }}
-      className="flex flex-col space-y-6 items-center justify-center"
-    >
-      <h2 className="text-center text-xl">1. 팀을 선택해주세요.</h2>
-      <Select onValueChange={handleChangeOption}>
-        <SelectTrigger className="w-56 h-12 text-base">
-          <SelectValue placeholder="현재 팀을 선택해주세요." />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            <SelectLabel>팀 선택</SelectLabel>
-            <SelectItem value="1팀">1팀</SelectItem>
-            <SelectItem value="2팀">2팀</SelectItem>
-            <SelectItem value="3팀">3팀</SelectItem>
-            <SelectItem value="4팀">4팀</SelectItem>
-            <SelectItem value="5팀">5팀</SelectItem>
-          </SelectGroup>
-        </SelectContent>
-      </Select>
-      <button type="submit" className="custom-btn">
-        {isLoading ? "저장중" : "저장"}
-      </button>
-    </motion.form>
+    !isNext && (
+      <motion.form
+        onSubmit={handleSubmit}
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : -20 }}
+        transition={{ duration: 1 }}
+        className="flex flex-col space-y-6 items-center justify-center"
+      >
+        <h2 className="text-center text-xl">1. 팀을 선택해주세요.</h2>
+        <Select onValueChange={handleChangeOption}>
+          <SelectTrigger className="w-56 h-12 text-base">
+            <SelectValue placeholder="현재 팀을 선택해주세요." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel>팀 선택</SelectLabel>
+              <SelectItem value="1팀">1팀</SelectItem>
+              <SelectItem value="2팀">2팀</SelectItem>
+              <SelectItem value="3팀">3팀</SelectItem>
+              <SelectItem value="4팀">4팀</SelectItem>
+              <SelectItem value="5팀">5팀</SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+        <button type="submit" className="custom-btn">
+          {isLoading ? "저장중" : "저장"}
+        </button>
+      </motion.form>
+    )
   );
 };
 

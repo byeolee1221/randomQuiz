@@ -3,23 +3,19 @@ import AnimateParagraph from "@/components/home/AnimateParagraph";
 import AnimateQuestion from "@/components/home/AnimateQuestion";
 import AnimateSelectTeam from "@/components/home/AnimateSelectTeam";
 import MainContents from "@/components/home/MainContents";
-import { oneStepAtom, secondStepAtom, thirdStepAtom } from "@/lib/atom";
-import { useAtom, useAtomValue } from "jotai";
+import { thirdStepAtom } from "@/lib/atom";
+import { useAtomValue } from "jotai";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
 const Home = () => {
   const isThirdStep = useAtomValue(thirdStepAtom);
   const [teamId, setTeamId] = useState<string | null>("");
-  const [oneStep, setOneStep] = useAtom(oneStepAtom);
-  const [secondStep, setSecondStep] = useAtom(secondStepAtom);
   
   useEffect(() => {
     if (isThirdStep) {
       const checkStorage = localStorage.getItem("selectedTeamId");
       setTeamId(checkStorage);
-      setOneStep(false);
-      setSecondStep(false);
     }
   }, [isThirdStep]);
 
