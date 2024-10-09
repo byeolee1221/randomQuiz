@@ -15,7 +15,7 @@ const AnimateMembers = () => {
     register,
     reset,
     handleSubmit,
-    formState: { errors, isLoading },
+    formState: { errors, isSubmitting },
   } = useForm<z.infer<typeof membersSchema>>({
     resolver: zodResolver(membersSchema),
     mode: "all",
@@ -114,7 +114,7 @@ const AnimateMembers = () => {
             ))}
           </div>
           <button type="submit" className="custom-btn">
-            {isLoading ? "팀원 등록중" : "팀원 등록하기"}
+            {isSubmitting ? "팀원 등록중" : "팀원 등록하기"}
           </button>
         </form>
       </motion.div>

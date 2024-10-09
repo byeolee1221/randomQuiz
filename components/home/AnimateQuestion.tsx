@@ -15,7 +15,7 @@ const AnimateQuestion = () => {
     register,
     reset,
     handleSubmit,
-    formState: { errors, isLoading },
+    formState: { errors, isSubmitting },
   } = useForm<z.infer<typeof questionSchema>>({
     resolver: zodResolver(questionSchema),
     mode: "all",
@@ -117,7 +117,7 @@ const AnimateQuestion = () => {
               />
             </div>
           ))}
-          <button className="custom-btn">{isLoading ? "문제를 섞고 있어요." : "문제 섞기"}</button>
+          <button className="custom-btn">{isSubmitting ? "문제를 섞고 있어요." : "문제 섞기"}</button>
         </form>
       </motion.div>
     )
