@@ -1,7 +1,7 @@
 import { InfoCircledIcon } from "@radix-ui/react-icons";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
-import { useAtom, useAtomValue } from "jotai";
-import { oneStepAtom, secondStepAtom, thirdStepAtom } from "@/lib/atom";
+import { useAtomValue } from "jotai";
+import { thirdStepAtom } from "@/lib/atom";
 import { motion } from "framer-motion";
 import { getRandomQuiz } from "@/lib/utils";
 import { IRandomQuiz } from "@/types/typeShare";
@@ -13,15 +13,10 @@ interface IProps {
 
 const ResetAndRetry = ({ teamId, setRandomQuiz }: IProps) => {
   const isFinal = useAtomValue(thirdStepAtom);
-  /* eslint-disable */
-  const [oneStep, setOneStep] = useAtom(oneStepAtom); 
-  const [secondStep, setSecondStep] = useAtom(secondStepAtom); 
 
   const handleReset = () => {
     localStorage.removeItem("selectedTeamId");
     window.location.reload();
-    setOneStep(false);
-    setSecondStep(false);
   };
 
   const handleRetry = () => {
