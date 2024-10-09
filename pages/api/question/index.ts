@@ -10,12 +10,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const { question, teamId } = req.body;
 
       const exceptNullQuestion = question.filter((q: string) => q !== null && q !== undefined);
-
-      const existingCheck = await Question.find({ teamId, question: { $in: exceptNullQuestion } });
-
-      if (existingCheck.length > 0) {
-        await Question.deleteMany({ teamId, question: { $in: exceptNullQuestion } });
-      }
   
       const savedQuestion = await Question.insertMany(exceptNullQuestion.map((q: string) => ({ question: q, teamId })));
       return res.status(201).json({ questions: savedQuestion });

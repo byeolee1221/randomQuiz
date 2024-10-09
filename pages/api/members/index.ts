@@ -11,12 +11,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       const exceptNullMember = members.filter((name: string) => name !== null && name !== undefined);
 
-      const checkExisting = await Members.find({ teamId, name: { $in: exceptNullMember } });
-
-      if (checkExisting.length > 0) {
-        await Members.deleteMany({ teamId, name: { $in: exceptNullMember } });
-      }
-      
       const savedMembers = await Promise.all(
         exceptNullMember.map(async (name: string) => {
           const newMember = new Members({ name: name, teamId });
