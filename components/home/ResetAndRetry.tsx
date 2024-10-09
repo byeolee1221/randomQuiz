@@ -13,8 +13,9 @@ interface IProps {
 
 const ResetAndRetry = ({ teamId, setRandomQuiz }: IProps) => {
   const isFinal = useAtomValue(thirdStepAtom);
-  const [_oneStep, setOneStep] = useAtom(oneStepAtom); 
-  const [_secondStep, setSecondStep] = useAtom(secondStepAtom); 
+  /* eslint-disable */
+  const [oneStep, setOneStep] = useAtom(oneStepAtom); 
+  const [secondStep, setSecondStep] = useAtom(secondStepAtom); 
 
   const handleReset = () => {
     localStorage.removeItem("selectedTeamId");
