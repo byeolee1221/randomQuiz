@@ -1,6 +1,6 @@
 # 랜덤퀴즈 순위정하기 미니프로젝트
 
-## 배포 웹사이트: https://random-quiz-byeolee.netlify.app/
+## 배포 웹사이트: https://random-quiz-ruby.vercel.app/
 
 ## 프로젝트 소개
 
