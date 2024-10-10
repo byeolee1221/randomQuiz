@@ -19,6 +19,7 @@ const AnimateSelectTeam = () => {
   const isVisible = useTimer(1200);
   const [selectOption, setSelectOption] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const [isNext, setIsNext] = useAtom(oneStepAtom);
 
   const handleChangeOption = (value: string) => {
@@ -30,6 +31,7 @@ const AnimateSelectTeam = () => {
 
     try {
       setIsLoading(true);
+      setIsSubmitted(true);
       const response = await axios.post("/api/team", {
         team: selectOption,
       });
@@ -47,6 +49,7 @@ const AnimateSelectTeam = () => {
       }
     } finally {
       setIsLoading(false);
+      setIsSubmitted(false);
     }
   };
 
@@ -75,7 +78,7 @@ const AnimateSelectTeam = () => {
             </SelectGroup>
           </SelectContent>
         </Select>
-        <button type="submit" className="custom-btn">
+        <button type="submit" className="custom-btn" disabled={isSubmitted}>
           {isLoading ? "저장중" : "저장"}
         </button>
       </motion.form>

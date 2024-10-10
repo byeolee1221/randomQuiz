@@ -113,7 +113,7 @@ const AnimateMembers = () => {
               </div>
             ))}
           </div>
-          <button type="submit" className="custom-btn">
+          <button type="submit" className="custom-btn" disabled={isSubmitting}>
             {isSubmitting ? "팀원 등록중" : "팀원 등록하기"}
           </button>
         </form>

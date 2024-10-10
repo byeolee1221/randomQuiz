@@ -1,5 +1,5 @@
 import { thirdStepAtom } from "@/lib/atom";
-import { useAtom } from "jotai";
+import { useAtomValue } from "jotai";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import ResetAndRetry from "./ResetAndRetry";
@@ -11,7 +11,7 @@ interface IProps {
 }
 
 const MainContents = ({ teamId }: IProps) => {
-  const isFinal = useAtom(thirdStepAtom);
+  const isFinal = useAtomValue(thirdStepAtom);
   const [randomQuiz, setRandomQuiz] = useState<IRandomQuiz[]>([]);
 
   useEffect(() => {

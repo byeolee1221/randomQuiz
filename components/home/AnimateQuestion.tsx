@@ -117,7 +117,7 @@ const AnimateQuestion = () => {
               />
             </div>
           ))}
-          <button className="custom-btn">{isSubmitting ? "문제를 섞고 있어요." : "문제 섞기"}</button>
+          <button className="custom-btn" disabled={isSubmitting}>{isSubmitting ? "문제를 섞고 있어요." : "문제 섞기"}</button>
         </form>
       </motion.div>
     )
