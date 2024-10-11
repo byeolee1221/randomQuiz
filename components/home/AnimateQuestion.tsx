@@ -109,7 +109,6 @@ const AnimateQuestion = () => {
                 type="text"
                 id={item.name}
                 name={item.name}
-                autoComplete="off"
                 className={clsx(
                   "border border-gray-900 bg-transparent w-[90%] focus:outline-none text-white rounded-md p-2 resize-none",
                   item.error ? "border-red-500" : ""

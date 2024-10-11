@@ -108,7 +108,6 @@ const AnimateMembers = () => {
                     item.error ? "border-2 border-red-500" : ""
                   )}
                   placeholder={item.placeHolder}
-                  autoComplete="off"
                 />
               </div>
             ))}
